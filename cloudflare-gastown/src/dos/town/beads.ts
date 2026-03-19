@@ -40,6 +40,7 @@ import type {
   BeadStatus,
   BeadPriority,
   BeadType,
+  FailureReason,
 } from '../../types';
 import type { BeadEventType } from '../../db/tables/bead-events.table';
 
@@ -255,7 +256,8 @@ export function updateBeadStatus(
   sql: SqlStorage,
   beadId: string,
   status: string,
-  agentId: string | null
+  agentId: string | null,
+  failureReason?: FailureReason
 ): Bead {
   const bead = getBead(sql, beadId);
   if (!bead) throw new Error(`Bead ${beadId} not found`);
@@ -285,6 +287,7 @@ export function updateBeadStatus(
     eventType: 'status_changed',
     oldValue: oldStatus,
     newValue: status,
+    metadata: status === 'failed' && failureReason ? { failure_reason: failureReason } : {},
   });
 
   // If the bead reached a terminal status and is tracked by a convoy,
@@ -1005,7 +1008,14 @@ export function addBeadToConvoy(sql: SqlStorage, beadId: string, convoyId: strin
   const metadataPatch: Record<string, unknown> = { convoy_id: convoyId };
   if (featureBranch) metadataPatch.feature_branch = featureBranch;
 
+<<<<<<< convoy/bead-failure-reasons-1172/22d1b15b/gt/ember/184533ed
+  const existingMetadata = z
+    .record(z.string(), z.unknown())
+    .catch({})
+    .parse(typeof bead.metadata === 'string' ? JSON.parse(bead.metadata) : (bead.metadata ?? {}));
+=======
   const existingMetadata = cloneBeadMetadata(bead.metadata);
+>>>>>>> gastown-staging
   const merged = { ...existingMetadata, ...metadataPatch };
 
   query(
@@ -1076,7 +1086,14 @@ export function removeBeadFromConvoy(sql: SqlStorage, beadId: string): string | 
   // Strip convoy_id + feature_branch from metadata
   const bead = getBead(sql, beadId);
   if (bead) {
+<<<<<<< convoy/bead-failure-reasons-1172/22d1b15b/gt/ember/184533ed
+    const existingMetadata = z
+      .record(z.string(), z.unknown())
+      .catch({})
+      .parse(typeof bead.metadata === 'string' ? JSON.parse(bead.metadata) : (bead.metadata ?? {}));
+=======
     const existingMetadata = cloneBeadMetadata(bead.metadata);
+>>>>>>> gastown-staging
     delete existingMetadata.convoy_id;
     delete existingMetadata.feature_branch;
     const timestamp = now();
