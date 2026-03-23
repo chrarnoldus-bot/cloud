@@ -59,7 +59,7 @@ import {
   Activity,
 } from 'lucide-react';
 import Link from 'next/link';
-import { formatDistanceToNow } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { toast } from 'sonner';
 import { AdminFileEditor } from './AdminFileEditor';
@@ -930,10 +930,12 @@ function InstanceEventsCard({ sandboxId }: { sandboxId: string }) {
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <span className="text-xs">
-                            {formatDistanceToNow(new Date(row.timestamp), { addSuffix: true })}
+                            {format(new Date(row.timestamp), 'MMM d, h:mm:ss a')}
                           </span>
                         </TooltipTrigger>
-                        <TooltipContent>{new Date(row.timestamp).toLocaleString()}</TooltipContent>
+                        <TooltipContent>
+                          {formatDistanceToNow(new Date(row.timestamp), { addSuffix: true })}
+                        </TooltipContent>
                       </Tooltip>
                     </td>
                     <td className="py-2 pr-4">
