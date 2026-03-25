@@ -3478,8 +3478,7 @@ export const kiloclaw_subscriptions = pgTable(
       .notNull(),
     user_id: text()
       .notNull()
-      .references(() => kilocode_users.id, { onDelete: 'cascade' })
-      .unique(),
+      .references(() => kilocode_users.id, { onDelete: 'cascade' }),
     stripe_subscription_id: text().unique(),
     stripe_schedule_id: text(),
     instance_id: uuid().references(() => kiloclaw_instances.id),
