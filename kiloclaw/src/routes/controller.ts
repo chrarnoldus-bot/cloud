@@ -40,13 +40,14 @@ const CheckinSchema = z.object({
 });
 
 /**
- * Derive the Next.js app origin for internal API calls.
+ * Return the Next.js app origin for internal API calls.
+ * Uses the dedicated NEXTJS_APP_URL env var set in wrangler.jsonc.
  */
-function nextApiOrigin(kilocodeApiBaseUrl: string | undefined): string {
-  if (!kilocodeApiBaseUrl) {
-    throw new Error('KILOCODE_API_BASE_URL not defined');
+function nextApiOrigin(nextjsAppUrl: string | undefined): string {
+  if (!nextjsAppUrl) {
+    throw new Error('NEXTJS_APP_URL is not configured');
   }
-  return new URL(kilocodeApiBaseUrl).origin;
+  return new URL(nextjsAppUrl).origin;
 }
 
 /**
@@ -182,6 +183,9 @@ controller.post('/checkin', async (c: Context<AppEnv>) => {
   // one-time "instance ready" email to the user via the Next.js internal API.
   if (data.loadAvg5m <= INSTANCE_READY_LOAD_THRESHOLD) {
     try {
+      // Validate config before marking the DO flag so a misconfigured env var
+      // doesn't permanently prevent the email with no way to retry.
+      const apiOrigin = nextApiOrigin(c.env.NEXTJS_APP_URL);
       const { shouldNotify } = await stub.tryMarkInstanceReady();
 
       if (shouldNotify && c.env.INTERNAL_API_SECRET) {
@@ -189,7 +193,6 @@ controller.post('/checkin', async (c: Context<AppEnv>) => {
           userId,
           sandboxId: data.sandboxId,
         });
-        const apiOrigin = nextApiOrigin(c.env.KILOCODE_API_BASE_URL);
         waitUntil(
           notifyInstanceReady(apiOrigin, c.env.INTERNAL_API_SECRET, userId, data.sandboxId).catch(
             err => {

@@ -57,6 +57,7 @@ function makeEnv(options?: {
           writeDataPoint: options.writeDataPoint,
         }
       : undefined,
+    NEXTJS_APP_URL: 'https://kilo.test',
     NEXT_PUBLIC_POSTHOG_KEY: options?.posthogKey,
     HYPERDRIVE: options?.hyperdriveConnectionString
       ? { connectionString: options.hyperdriveConnectionString }

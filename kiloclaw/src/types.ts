@@ -12,6 +12,9 @@ export type KiloClawEnv = {
   HYPERDRIVE?: Hyperdrive;
   KV_CLAW_CACHE: KVNamespace;
 
+  // Next.js app origin for internal API calls (e.g. instance-ready email)
+  NEXTJS_APP_URL?: string;
+
   // Auth secrets
   NEXTAUTH_SECRET?: string;
   INTERNAL_API_SECRET?: string;
