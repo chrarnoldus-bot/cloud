@@ -1744,6 +1744,7 @@ export const kiloclawRouter = createTRPCRouter({
       .update(kiloclaw_subscriptions)
       .set({
         cancel_at_period_end: true,
+        pending_conversion: true,
         ...(scheduleIdToRelease
           ? { stripe_schedule_id: null, scheduled_plan: null, scheduled_by: null }
           : {}),
@@ -1774,7 +1775,7 @@ export const kiloclawRouter = createTRPCRouter({
       });
       await db
         .update(kiloclaw_subscriptions)
-        .set({ cancel_at_period_end: false })
+        .set({ cancel_at_period_end: false, pending_conversion: false })
         .where(eq(kiloclaw_subscriptions.id, sub.id));
 
       // Best-effort: restore the auto intro→regular schedule if on an intro price
@@ -1790,7 +1791,7 @@ export const kiloclawRouter = createTRPCRouter({
       // Pure credit path — local DB only, no Stripe API call
       await db
         .update(kiloclaw_subscriptions)
-        .set({ cancel_at_period_end: false })
+        .set({ cancel_at_period_end: false, pending_conversion: false })
         .where(eq(kiloclaw_subscriptions.id, sub.id));
     } else {
       throw new TRPCError({
