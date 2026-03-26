@@ -475,6 +475,8 @@ export declare const gastownRouter: import('@trpc/server').TRPCBuiltRouter<
               gates: string[];
               auto_merge: boolean;
               require_clean_merge: boolean;
+              auto_resolve_pr_feedback: boolean;
+              auto_merge_delay_minutes: number | null;
             }
           | undefined;
         alarm_interval_active?: number | undefined;
@@ -527,6 +529,8 @@ export declare const gastownRouter: import('@trpc/server').TRPCBuiltRouter<
                 gates?: string[] | undefined;
                 auto_merge?: boolean | undefined;
                 require_clean_merge?: boolean | undefined;
+                auto_resolve_pr_feedback?: boolean | undefined;
+                auto_merge_delay_minutes?: number | null | undefined;
               }
             | undefined;
           alarm_interval_active?: number | undefined;
@@ -573,6 +577,8 @@ export declare const gastownRouter: import('@trpc/server').TRPCBuiltRouter<
               gates: string[];
               auto_merge: boolean;
               require_clean_merge: boolean;
+              auto_resolve_pr_feedback: boolean;
+              auto_merge_delay_minutes: number | null;
             }
           | undefined;
         alarm_interval_active?: number | undefined;
@@ -1747,6 +1753,8 @@ export declare const wrappedGastownRouter: import('@trpc/server').TRPCBuiltRoute
                   gates: string[];
                   auto_merge: boolean;
                   require_clean_merge: boolean;
+                  auto_resolve_pr_feedback: boolean;
+                  auto_merge_delay_minutes: number | null;
                 }
               | undefined;
             alarm_interval_active?: number | undefined;
@@ -1799,6 +1807,8 @@ export declare const wrappedGastownRouter: import('@trpc/server').TRPCBuiltRoute
                     gates?: string[] | undefined;
                     auto_merge?: boolean | undefined;
                     require_clean_merge?: boolean | undefined;
+                    auto_resolve_pr_feedback?: boolean | undefined;
+                    auto_merge_delay_minutes?: number | null | undefined;
                   }
                 | undefined;
               alarm_interval_active?: number | undefined;
@@ -1845,6 +1855,8 @@ export declare const wrappedGastownRouter: import('@trpc/server').TRPCBuiltRoute
                   gates: string[];
                   auto_merge: boolean;
                   require_clean_merge: boolean;
+                  auto_resolve_pr_feedback: boolean;
+                  auto_merge_delay_minutes: number | null;
                 }
               | undefined;
             alarm_interval_active?: number | undefined;

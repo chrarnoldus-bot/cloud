@@ -21,7 +21,11 @@ import {
   createTableAgentMetadata,
   migrateAgentMetadata,
 } from '../../db/tables/agent-metadata.table';
-import { review_metadata, createTableReviewMetadata } from '../../db/tables/review-metadata.table';
+import {
+  review_metadata,
+  createTableReviewMetadata,
+  migrateReviewMetadata,
+} from '../../db/tables/review-metadata.table';
 import {
   escalation_metadata,
   createTableEscalationMetadata,
@@ -65,7 +69,7 @@ export function initBeadTables(sql: SqlStorage): void {
   dropCheckConstraints(sql);
 
   // Migrations: add columns to existing tables (idempotent)
-  for (const stmt of [...migrateConvoyMetadata(), ...migrateAgentMetadata()]) {
+  for (const stmt of [...migrateConvoyMetadata(), ...migrateAgentMetadata(), ...migrateReviewMetadata()]) {
     try {
       query(sql, stmt, []);
     } catch {
