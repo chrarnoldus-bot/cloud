@@ -3681,6 +3681,7 @@ export class TownDO extends DurableObject<Env> {
     // marks allChecksPass as false to prevent premature auto-merge.
     let hasFailingChecks = false;
     let allChecksPass = false;
+    let hasUncheckedRuns = false;
     try {
       // Get the PR's head SHA
       const prRes = await fetch(
@@ -3718,14 +3719,12 @@ export class TownDO extends DurableObject<Env> {
               ? (checksData.data.total_count ?? runs.length)
               : runs.length;
             const hasMorePages = totalCount > runs.length;
+            hasUncheckedRuns = hasMorePages;
 
-            hasFailingChecks =
-              runs.some(
-                r =>
-                  r.status === 'completed' &&
-                  r.conclusion !== 'success' &&
-                  r.conclusion !== 'skipped'
-              ) || hasMorePages; // Conservatively assume unpaginated runs may be failing
+            hasFailingChecks = runs.some(
+              r =>
+                r.status === 'completed' && r.conclusion !== 'success' && r.conclusion !== 'skipped'
+            );
             // All checks pass = at least one check, all returned runs completed
             // successfully, and no unpaginated runs exist
             allChecksPass =
@@ -3743,7 +3742,7 @@ export class TownDO extends DurableObject<Env> {
       console.warn(`${TOWN_LOG} checkPRFeedback: check-runs failed for ${prUrl}`, err);
     }
 
-    return { hasUnresolvedComments, hasFailingChecks, allChecksPass };
+    return { hasUnresolvedComments, hasFailingChecks, allChecksPass, hasUncheckedRuns };
   }
 
   /**
