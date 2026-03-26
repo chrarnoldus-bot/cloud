@@ -69,7 +69,11 @@ export function initBeadTables(sql: SqlStorage): void {
   dropCheckConstraints(sql);
 
   // Migrations: add columns to existing tables (idempotent)
-  for (const stmt of [...migrateConvoyMetadata(), ...migrateAgentMetadata(), ...migrateReviewMetadata()]) {
+  for (const stmt of [
+    ...migrateConvoyMetadata(),
+    ...migrateAgentMetadata(),
+    ...migrateReviewMetadata(),
+  ]) {
     try {
       query(sql, stmt, []);
     } catch {
