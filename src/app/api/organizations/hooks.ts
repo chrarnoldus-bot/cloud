@@ -382,6 +382,26 @@ export function useStopOrganizationSubscriptionCancellation() {
   );
 }
 
+export function useChangeBillingCycle() {
+  const trpc = useTRPC();
+  const onSuccess = useInvalidateAllOrganizationData();
+  return useMutation(
+    trpc.organizations.subscription.changeBillingCycle.mutationOptions({
+      onSuccess,
+    })
+  );
+}
+
+export function useCancelBillingCycleChange() {
+  const trpc = useTRPC();
+  const onSuccess = useInvalidateAllOrganizationData();
+  return useMutation(
+    trpc.organizations.subscription.cancelBillingCycleChange.mutationOptions({
+      onSuccess,
+    })
+  );
+}
+
 export function useUpdateOrganizationSeatCount() {
   const trpc = useTRPC();
   const onSuccess = useInvalidateAllOrganizationData();
